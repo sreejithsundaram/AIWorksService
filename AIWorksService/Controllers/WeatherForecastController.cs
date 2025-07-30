@@ -61,5 +61,34 @@ namespace AIWorksService.Controllers
         {
             return Ok();
         }
+
+        [HttpGet("/get")]
+        public IActionResult GetAI()
+        {
+            string? result = string.Empty;
+            string? url = string.Empty;
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    url = _configuration["WORKS_API"];
+                    if (url != null)
+                    {
+                        var response = client.GetAsync(url).Result;
+                        if (response != null)
+                        {
+                            result = response.Content.ReadAsStringAsync().Result;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result = ex.StackTrace;
+            }
+            result = result ?? "The result is null";
+
+            return Ok(result);
+        }
     }
 }
