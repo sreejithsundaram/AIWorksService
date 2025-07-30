@@ -23,27 +23,43 @@ namespace AIWorksService.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public async Task<IEnumerable<WeatherForecast>> Get()
         {
-            string result = string.Empty;
-            using (HttpClient client = new HttpClient())
+            string? result = string.Empty;
+            string? url = string.Empty;
+            try
             {
-                string? url = _configuration["WORKS_API"];
-                if (url != null)
+                using (HttpClient client = new HttpClient())
                 {
-                    var response = await client.GetAsync(url);
-                    if (response != null) 
-                    { 
-                        result = await response.Content.ReadAsStringAsync();
+                    url = _configuration["WORKS_API"];
+                    if (url != null)
+                    {
+                        var response = await client.GetAsync(url);
+                        if (response != null)
+                        {
+                            result = await response.Content.ReadAsStringAsync();
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                    result = ex.StackTrace;
+            }
+            result = result ?? "The result is null";
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)],
-                Greeting = result
+                Greeting = result,
+                Url = url
             })
             .ToArray();
+        }
+
+        [HttpGet("/ping")]
+        public IActionResult Ping()
+        {
+            return Ok();
         }
     }
 }

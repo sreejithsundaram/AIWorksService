@@ -11,5 +11,6 @@ namespace AIWorksService
         public string? Summary { get; set; }
 
         public string? Greeting { get; set; }
+        public string? Url { get; set; }
     }
 }
