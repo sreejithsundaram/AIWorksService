@@ -82,9 +82,13 @@ namespace AIWorksService.Controllers
                     }
                 }
             }
+            catch(AggregateException)
+            {
+                result = "AI system is not running";
+            }
             catch (Exception ex)
             {
-                result = ex.StackTrace;
+                result = ex.Message;
             }
             result = result ?? "The result is null";
 
