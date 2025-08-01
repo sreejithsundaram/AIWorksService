@@ -71,6 +71,7 @@ namespace AIWorksService.Controllers
             {
                 using (HttpClient client = new HttpClient())
                 {
+                    client.Timeout = TimeSpan.FromMilliseconds(500);
                     url = _configuration["WORKS_API"];
                     if (url != null)
                     {
